@@ -14,11 +14,18 @@ export const saveMappingData = async (req, res) => {
     const userId = req.user.id;
     const { emailId, robotId, map_image, map_name } = req.body;
 
-    if (!emailId || !robotId || !map_image || !map_name) {
+    // Collect missing fields
+    const missingFields = [];
+    if (!emailId) missingFields.push("emailId");
+    if (!robotId) missingFields.push("robotId");
+    if (!map_image) missingFields.push("map_image");
+    if (!map_name) missingFields.push("map_name");
+
+    // If any fields are missing, return a specific error message
+    if (missingFields.length > 0) {
       return res.status(400).json({
         success: false,
-        message:
-          "Missing required fields: emailId, robotId, map_image, map_name.",
+        message: `Missing required fields: ${missingFields.join(", ")}.`,
       });
     }
 
@@ -75,8 +82,8 @@ export const getMappingData = async (req, res) => {
     const data = await noMode.find({ userId, robotId });
     if (data.length === 0) {
       return res.status(200).json({
-        success: true,
-        message: `No mapping data found for robotId:${robotId}.Please start your mapping.`,
+        success: false,
+        message: `No mapping data found for robotId:${robotId}.`,
         data: [],
       });
     }
@@ -122,10 +129,16 @@ export const getMapImage = async (req, res) => {
   try {
     const { robotId, map_name } = req.query;
 
-    if (!robotId || !map_name) {
+    // Collect missing fields
+    const missingFields = [];
+    if (!robotId) missingFields.push("robotId");
+    if (!map_name) missingFields.push("map_name");
+
+    // If any fields are missing, return a specific error message
+    if (missingFields.length > 0) {
       return res.status(400).json({
         success: false,
-        message: "Missing required query parameters: robotId, map_name.",
+        message: `Missing required fields: ${missingFields.join(", ")}.`,
       });
     }
 
@@ -159,7 +172,6 @@ export const getMapImage = async (req, res) => {
   }
 };
 
-
 // Delete Map
 export const deleteMappingData = async (req, res) => {
   try {
@@ -167,9 +179,20 @@ export const deleteMappingData = async (req, res) => {
     //const userId =req.user.id;
     const { robotId, map_name } = req.query;
     console.log("params is ", req.query);
-    if (!robotId || !map_name) {
-      return res.status(404).json({ message: "provide robotid & map_name" });
+
+    // Collect missing fields
+    const missingFields = [];
+    if (!robotId) missingFields.push("robotId");
+    if (!map_name) missingFields.push("map_name");
+
+    // If any fields are missing, return a specific error message
+    if (missingFields.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: `Missing required fields: ${missingFields.join(", ")}.`,
+      });
     }
+
     const findAndDeletemapData = await noMode.findOne({
       userId,
       robotId,

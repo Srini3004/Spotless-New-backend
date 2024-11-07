@@ -17,20 +17,4 @@ export const getRobotsByEmail = async (req, res) => {
   }
 };
 
-// Controller to get robot details
-export const getRobotDetails = async (req, res) => {
-  try {
-    const { robotId } = req.params;
-
-    const robot = await Robot.findOne({ robotId }).exec();
-
-    if (!robot) {
-      return res.status(404).json({ message: "Robot not found" });
-    }
-
-    return res.json(robot);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
 

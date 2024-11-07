@@ -28,6 +28,8 @@ const modeConfig = {
   }
 };
 
+//save history
+
 export const singleFiveModeApi = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -65,7 +67,6 @@ export const singleFiveModeApi = async (req, res) => {
       });
     }
 
- 
     const modeData = fields.reduce((data, field) => {
       data[field] = req.body[field];
       return data;
@@ -80,6 +81,7 @@ export const singleFiveModeApi = async (req, res) => {
   }
 };
 
+// get history 
 
 export const getModeRobotId = async (req, res) => {
   try {
