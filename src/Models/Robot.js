@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 
 const robotSchema = new Schema({
   robotId: { type: String, required: true, unique: true },
+  robotname: { type: String, required: true },
   emailId: { type: String, required: true},
   username: { type: String, required: true },
   model: { type: String, required: true },
