@@ -53,7 +53,7 @@ export const singleFiveModeApi = async (req, res) => {
     if (!modeKey) {
       const validModes = Object.keys(modeConfig).map(key => modeConfig[key].modeName).join(", ");
       return res.status(400).json({
-        message: Invalid mode provided: "${mode}". Valid modes are: ${validModes}
+        message: `Invalid mode provided: "${mode}". Valid modes are: ${validModes}`
       });
     }
 
@@ -73,7 +73,7 @@ export const singleFiveModeApi = async (req, res) => {
     }, { userId }); 
 
     const result = await model.create(modeData);
-    return res.status(201).json({ message: ${modeName} data saved successfully., data: result });
+    return res.status(201).json({ message: `${modeName} data saved successfully.`, data: result });
 
   } catch (error) {
     console.error("Error saving mode data:", error);
