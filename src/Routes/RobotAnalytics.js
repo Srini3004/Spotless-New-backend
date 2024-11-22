@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import{saveRobotAnalytics } from "../Controllers/robotAnalytics.js"
+import{saveRobotAnalytics,getRobotAnalyticsByEmail} from "../Controllers/robotAnalytics.js"
 
 const router = Router();
 
 router.post('/robotanalytics', saveRobotAnalytics);
+router.get('/analytics/:emailId', getRobotAnalyticsByEmail);
 
 
 
