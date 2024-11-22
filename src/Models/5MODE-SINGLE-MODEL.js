@@ -24,6 +24,7 @@ const oneModeSchema = new Schema({
   mode: { type: String, required: true },
   emailId: { type: String, required: true },
   robotId: { type: String, required: true },
+  subLocation: { type: String, required: true },
   map_name: { type: String },
   position: [vectorSchema],
   orientation: [orientationSchema],
@@ -53,7 +54,7 @@ export const ManualMappingMode = OneModeModel.discriminator("ManualMapping", new
   
     emailId:{type:String ,required:true},
     robotId:{type:String,required:true},
-  
+    subLocation: { type: String, required: true },
     map_name: { type: String, required: true },
     position: [vectorSchema],
     orientation: [orientationSchema],
@@ -61,6 +62,7 @@ export const ManualMappingMode = OneModeModel.discriminator("ManualMapping", new
     
 }));
 export const AutoDisinfectionMode = OneModeModel.discriminator("AutoDisinfection", new Schema({
+  subLocation: { type: String, required: true },
   map_name: { type: String, required: true },
   perimeter: { type: String, required: true },
   object_name: { type: String, required: true },
@@ -69,6 +71,7 @@ export const AutoDisinfectionMode = OneModeModel.discriminator("AutoDisinfection
   status:{type:String,required:true}
 }));
 export const ObjectDisinfectionMode = OneModeModel.discriminator("ObjectDisinfection", new Schema({
+  subLocation: { type: String, required: true },
   map_name: { type: String, required: true },
   object_name: { type: String, required: true },
   total_object: { type: Number, required: true },
@@ -79,6 +82,7 @@ export const AutoDockingMode = OneModeModel.discriminator("AutoDocking", new Sch
     emailId:{type:String ,required:true},
     robotId:{type:String,required:true},
     map_name: { type: String, required: true },
+    subLocation: { type: String, required: true },
     position: [vectorSchema],
     orientation: [orientationSchema],
     docking:{type:String,required:true},

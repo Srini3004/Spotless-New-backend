@@ -8,22 +8,22 @@ const modeConfig = {
   },
   MANUAL_MODE: {
     modeName:"ManualMapping", 
-    fields: ["mode", "emailId", "robotId", "map_name", "position", "orientation","status"],
+    fields: ["mode", "emailId", "robotId", "map_name","subLocation", "position", "orientation","status"],
     model: OneModeModel,
   },
   AUTO_DISINFECTION_MODE: {
     modeName:"AutoDisinfection",
-    fields: ["mode", "emailId", "robotId", "map_name", "position", "orientation", "perimeter", "object_name", "total_object", "completed_object","status"],
+    fields: ["mode", "emailId", "robotId", "map_name","subLocation", "position", "orientation", "perimeter", "object_name", "total_object", "completed_object","status"],
     model: OneModeModel,
   },
   OBJECT_DISINFECTION_MODE: {
     modeName:"ObjectDisinfection",
-    fields: ["mode", "emailId", "robotId", "map_name", "position", "orientation", "total_object","object_name","completed_object","status"],
+    fields: ["mode", "emailId", "robotId", "map_name", "subLocation","position", "orientation", "total_object","object_name","completed_object","status"],
     model: OneModeModel,
   },
   AUTO_DOCKING_MODE: {
     modeName:"AutoDocking", 
-    fields: ["mode", "emailId", "robotId", "map_name", "position", "orientation", "docking","status"],
+    fields: ["mode", "emailId", "robotId", "map_name","subLocation", "position", "orientation", "docking","status"],
     model: OneModeModel,
   }
 };
@@ -53,7 +53,7 @@ export const singleFiveModeApi = async (req, res) => {
     if (!modeKey) {
       const validModes = Object.keys(modeConfig).map(key => modeConfig[key].modeName).join(", ");
       return res.status(400).json({
-        message: `Invalid mode provided: "${mode}". Valid modes are: ${validModes}`
+        message: Invalid mode provided: "${mode}". Valid modes are: ${validModes}
       });
     }
 
@@ -73,7 +73,7 @@ export const singleFiveModeApi = async (req, res) => {
     }, { userId }); 
 
     const result = await model.create(modeData);
-    return res.status(201).json({ message: `${modeName} data saved successfully.`, data: result });
+    return res.status(201).json({ message: ${modeName} data saved successfully., data: result });
 
   } catch (error) {
     console.error("Error saving mode data:", error);
@@ -85,25 +85,18 @@ export const singleFiveModeApi = async (req, res) => {
 
 export const getModeRobotId = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const { robotId } = req.query;
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized: User not found." });
-    }
-    if (!robotId) {
-      return res.status(400).json({ message: "Missing robotId parameter." });
-    }
+    const { email } = req.user; // Extract email from verified token
 
-    const modes = await OneModeModel.find({ robotId });
+    // Query the database for records matching the email
+    const records = await OneModeModel.find({ emailId: email });
 
-    if (modes.length === 0) {
-      return res.status(404).json({ message: `No modes found for robotId "${robotId}".` });
+    if (!records || records.length === 0) {
+      return res.status(404).json({ message: "No records found for the specified email" });
     }
 
-    return res.status(200).json({ message: "Modes retrieved successfully.", data: modes });
-
+    return res.status(200).json(records);
   } catch (error) {
-    console.error("Error retrieving modes:", error);
-    return res.status(500).json({ message: "Server error.", error: error.message });
+    console.error(error);
+    return res.status(500).json({ message: "Server error", error: error.message });
   }
 };
